@@ -10,6 +10,7 @@ from typing import Tuple
 import markdown
 import requests
 from airflow import DAG
+from airflow.decorators import dag, task
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
 from airflow.utils.email import send_email
@@ -80,16 +81,20 @@ default_args = {
     "email_on_retry": False,
     "retries": 0,
 }
-with DAG(
-        dag_id="monitora_consultas_publicas",
-        schedule_interval="0 3 * * *",
-        default_args=default_args,
-        catchup=False,
-        tags=["govbr", "consulta_publica"]
-        ) as dag:
 
-    PythonOperator(
-        task_id='find_new_publications',
-        python_callable=_find_new_publications,
-        dag=dag
+@dag(
+    dag_id="monitora_consultas_publicas",
+    schedule_interval="0 3 * * *",
+    default_args=default_args,
+    catchup=False,
+    tags=["govbr", "consulta_publica"]
 )
+def monitora_consultas_publicas():
+
+    @task
+    def find_new_publications():
+        _find_new_publications()
+
+    find_new_publications()
+
+dag = monitora_consultas_publicas()
