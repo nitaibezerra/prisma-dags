@@ -77,8 +77,6 @@ def _report_new_publications():
 default_args = {
     "owner": "nitai",
     "start_date": datetime(2022, 8, 4),
-    "email_on_failure": False,
-    "email_on_retry": False,
     "retries": 0,
 }
 
