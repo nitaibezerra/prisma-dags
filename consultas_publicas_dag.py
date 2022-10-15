@@ -40,7 +40,7 @@ def _parse(consulta: dict) -> Tuple[str, str]:
 
     return markdown.markdown('\n'.join(blocks))
 
-def _find_new_publications():
+def _report_new_publications():
     soup = _get_soup(WEBSITE_URL)
     pattern = re.compile(
         r"let grupoConsultaPublica = ([\s\S]+]);",
@@ -92,9 +92,9 @@ default_args = {
 def monitora_consultas_publicas():
 
     @task
-    def find_new_publications():
-        _find_new_publications()
+    def report_new_publications():
+        _report_new_publications()
 
-    find_new_publications()
+    report_new_publications()
 
 dag = monitora_consultas_publicas()
