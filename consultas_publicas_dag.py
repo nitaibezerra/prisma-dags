@@ -26,17 +26,19 @@ def _parse(consulta: dict) -> Tuple[str, str]:
     """Parse to email fields"""
     subject = f'Nova Consulta Pública do Órgão {consulta["nom_orgao"]}'
 
-    blocks = []
-    blocks.append(f'### Nome: {consulta["nom_titulo"]}\n')
-    link = f'https://www.gov.br/participamaisbrasil/{consulta["dsc_urlamigavel"]}'
-    blocks.append(f'* **link**: [{link}]({link})\n')
-    blocks.append(f'* **Orgão**: {consulta["nom_orgao"]}\n')
-    blocks.append(f'* **sigla**: {consulta["sigla"]}\n')
-    blocks.append(f'* **área**: {consulta["area"]}\n')
-    blocks.append(f'* **setor**: {consulta["setor"]}\n')
-    blocks.append(f'* **Data de Abertura**: {consulta["data_abertura"]}\n')
-    blocks.append(f'* **Data de Encerramento**: {consulta["data_encerramento"]}\n')
-    blocks.append(f'* **Status**: {consulta["titulo_status"]}\n')
+    link = ('https://www.gov.br/participamaisbrasil/'
+            f'{consulta["dsc_urlamigavel"]}')
+    blocks = [
+        f'### Nome: {consulta["nom_titulo"]}\n',
+        f'* **link**: [{link}]({link})\n',
+        f'* **Orgão**: {consulta["nom_orgao"]}\n',
+        f'* **sigla**: {consulta["sigla"]}\n',
+        f'* **área**: {consulta["area"]}\n',
+        f'* **setor**: {consulta["setor"]}\n',
+        f'* **Data de Abertura**: {consulta["data_abertura"]}\n',
+        f'* **Data de Encerramento**: {consulta["data_encerramento"]}\n',
+        f'* **Status**: {consulta["titulo_status"]}\n',
+    ]
 
     return markdown.markdown('\n'.join(blocks))
 
