@@ -84,7 +84,7 @@ def send_new_publications(publications: List[dict]):
 default_args = {
     "owner": "nitai",
     "start_date": datetime(2022, 8, 4),
-    "retries": 0,
+    "retries": 3,
 }
 
 @dag(
