@@ -5,7 +5,7 @@ Monitoramento de Publicação de Consultas Públicas
 import json
 import re
 from datetime import datetime
-from typing import Tuple
+from typing import List, Tuple
 
 import markdown
 import requests
@@ -47,31 +47,38 @@ def _report_new_publications():
         re.MULTILINE | re.DOTALL
     )
     js_var = pattern.search(str(soup.html)).group(1)
-    consultas_publicas = json.loads(js_var)
+
     consultas_publicas_dict = {
         c['cod_objeto']: c
-        for c in consultas_publicas
+        for c in json.loads(js_var)
     }
-
-    recipients_var = Variable.get('consulta_publica_recipients')
-    recipients = re.split(r',|\n', recipients_var)
-    recipients = list(map(str.strip, recipients))
 
     published_ids = set(consultas_publicas_dict.keys())
     old_published_ids = json.loads(Variable.get('consulta_publica_ids', []))
 
-    if old_published_ids and (new_ids := published_ids - set(old_published_ids)):
-        for new_publication_id in new_ids:
-            new_publication = consultas_publicas_dict[new_publication_id]
+    if old_published_ids:
+        new_ids = published_ids - set(old_published_ids)
+        new_publications = [
+            consultas_publicas_dict[new_id] for new_id in new_ids
+        ]
 
-            send_email(to=recipients,
-                       subject='Nova Consulta Pública Publicada',
-                       html_content=_parse(new_publication)
-                       )
+        send_new_publications(new_publications)
 
     Variable.set("consulta_publica_ids",
                  list(published_ids),
                  serialize_json=True)
+
+
+def send_new_publications(publications: List[dict]):
+    recipients_var = Variable.get('consulta_publica_recipients')
+    recipients = re.split(r',|\n', recipients_var)
+    recipients = list(map(str.strip, recipients))
+
+    for publication in publications:
+        send_email(to=recipients,
+                   subject='Nova Consulta Pública Publicada',
+                   html_content=_parse(publication)
+                   )
 
 
 default_args = {
