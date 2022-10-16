@@ -9,10 +9,8 @@ from typing import Tuple
 
 import markdown
 import requests
-from airflow import DAG
 from airflow.decorators import dag, task
 from airflow.models import Variable
-from airflow.operators.python import PythonOperator
 from airflow.utils.email import send_email
 from bs4 import BeautifulSoup
 
