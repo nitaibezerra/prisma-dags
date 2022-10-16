@@ -75,10 +75,11 @@ def send_new_publications(publications: List[dict]):
     recipients = list(map(str.strip, recipients))
 
     for publication in publications:
-        send_email(to=recipients,
-                   subject='Nova Consulta Pública Publicada',
-                   html_content=_parse(publication)
-                   )
+        html_content = _parse(publication)
+        for recipient in recipients:
+            send_email(to=[recipient],
+                       subject='Nova Consulta Pública Publicada',
+                       html_content=html_content)
 
 
 default_args = {
