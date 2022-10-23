@@ -1,5 +1,13 @@
 """
-Monitoramento de Publicação de Consultas Públicas
+Monitoramento de Publicação de Consultas Públicas.
+
+Esta DAG realiza diariamente a pesquisa por novas consultas públicas
+publicadas no portal de consultas públicas do governo federal e envia
+por email os resultados encontrados para os destinatários cadastrados.
+
+Os emails dos destinatários devem ser cadastrados na variável do airflow
+com nome `consulta_publica_recipients` (um por linha ou separados por
+vírgula).
 """
 
 import json
