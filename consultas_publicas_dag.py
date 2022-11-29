@@ -37,19 +37,19 @@ def _parse(publications: List[dict]) -> Tuple[str, str]:
         link = ('https://www.gov.br/participamaisbrasil/'
                 f'{publication["dsc_urlamigavel"]}')
         blocks += [
-            f'### Nome: {publication["nom_titulo"]}\n',
-            f'* **link**: [{link}]({link})\n',
-            f'* **Órgão**: {publication["nom_orgao"]}\n',
-            f'* **sigla**: {publication["sigla"]}\n',
-            f'* **área**: {publication["area"]}\n',
-            f'* **setor**: {publication["setor"]}\n',
-            f'* **Data de Abertura**: {publication["data_abertura"]}\n',
-            f'* **Data de Encerramento**: {publication["data_encerramento"]}\n',
-            f'* **Status**: {publication["titulo_status"]}\n',
-            f'----\n',
+            f'### Nome: {publication["nom_titulo"]}',
+            f'* **link**: [{link}]({link})',
+            f'* **Órgão**: {publication["nom_orgao"]}',
+            f'* **sigla**: {publication["sigla"]}',
+            f'* **área**: {publication["area"]}',
+            f'* **setor**: {publication["setor"]}',
+            f'* **Data de Abertura**: {publication["data_abertura"]}',
+            f'* **Data de Encerramento**: {publication["data_encerramento"]}',
+            f'* **Status**: {publication["titulo_status"]}',
+            f'----',
         ]
 
-    return markdown.markdown('\n'.join(blocks))
+    return markdown.markdown('\n\n'.join(blocks))
 
 
 def _report_new_publications():
