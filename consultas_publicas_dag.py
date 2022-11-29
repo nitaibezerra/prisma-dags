@@ -30,23 +30,24 @@ def _get_soup(url: str) -> BeautifulSoup:
     return BeautifulSoup(page_req.content, from_encoding='iso-8859-1')
 
 
-def _parse(consulta: dict) -> Tuple[str, str]:
-    """Parse to email fields"""
-    subject = f'Nova Consulta Pública do Órgão {consulta["nom_orgao"]}'
-
-    link = ('https://www.gov.br/participamaisbrasil/'
-            f'{consulta["dsc_urlamigavel"]}')
-    blocks = [
-        f'### Nome: {consulta["nom_titulo"]}\n',
-        f'* **link**: [{link}]({link})\n',
-        f'* **Orgão**: {consulta["nom_orgao"]}\n',
-        f'* **sigla**: {consulta["sigla"]}\n',
-        f'* **área**: {consulta["area"]}\n',
-        f'* **setor**: {consulta["setor"]}\n',
-        f'* **Data de Abertura**: {consulta["data_abertura"]}\n',
-        f'* **Data de Encerramento**: {consulta["data_encerramento"]}\n',
-        f'* **Status**: {consulta["titulo_status"]}\n',
-    ]
+def _parse(publications: List[dict]) -> Tuple[str, str]:
+    """Parse to email html content"""
+    blocks = []
+    for publication in publications:
+        link = ('https://www.gov.br/participamaisbrasil/'
+                f'{publication["dsc_urlamigavel"]}')
+        blocks += [
+            f'### Nome: {publication["nom_titulo"]}\n',
+            f'* **link**: [{link}]({link})\n',
+            f'* **Órgão**: {publication["nom_orgao"]}\n',
+            f'* **sigla**: {publication["sigla"]}\n',
+            f'* **área**: {publication["area"]}\n',
+            f'* **setor**: {publication["setor"]}\n',
+            f'* **Data de Abertura**: {publication["data_abertura"]}\n',
+            f'* **Data de Encerramento**: {publication["data_encerramento"]}\n',
+            f'* **Status**: {publication["titulo_status"]}\n',
+            f'----\n',
+        ]
 
     return markdown.markdown('\n'.join(blocks))
 
@@ -85,12 +86,12 @@ def send_new_publications(publications: List[dict]):
     recipients = re.split(r',|\n', recipients_var)
     recipients = list(map(str.strip, recipients))
 
-    for publication in publications:
-        html_content = _parse(publication)
-        for recipient in recipients:
-            send_email(to=[recipient],
-                       subject='Nova Consulta Pública Publicada',
-                       html_content=html_content)
+    html_content = _parse(publications)
+
+    for recipient in recipients:
+        send_email(to=[recipient],
+                    subject='[Prisma] Novas Consultas Públicas',
+                    html_content=html_content)
 
 
 default_args = {
