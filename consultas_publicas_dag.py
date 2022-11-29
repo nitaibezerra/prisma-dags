@@ -24,9 +24,11 @@ from bs4 import BeautifulSoup
 
 WEBSITE_URL = 'https://www.gov.br/participamaisbrasil/consultas-publicas'
 
+
 def _get_soup(url: str) -> BeautifulSoup:
     page_req = requests.get(url)
     return BeautifulSoup(page_req.content, from_encoding='iso-8859-1')
+
 
 def _parse(consulta: dict) -> Tuple[str, str]:
     """Parse to email fields"""
@@ -47,6 +49,7 @@ def _parse(consulta: dict) -> Tuple[str, str]:
     ]
 
     return markdown.markdown('\n'.join(blocks))
+
 
 def _report_new_publications():
     soup = _get_soup(WEBSITE_URL)
