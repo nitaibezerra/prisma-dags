@@ -82,6 +82,9 @@ def _report_new_publications():
 
 
 def send_new_publications(publications: List[dict]):
+    if not publications:
+        return
+
     recipients_var = Variable.get('consulta_publica_recipients')
     recipients = re.split(r',|\n', recipients_var)
     recipients = list(map(str.strip, recipients))
